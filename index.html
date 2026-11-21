@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>SEMANGATTT REIII</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --deep: #04223a;
+      --sea: #0a5c8a;
+      --teal: #19a7b8;
+      --foam: #b9f3f0;
+      --coral: #ff6f7d;
+      --sun: #ffd36b;
+      --ink: #021626;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: inherit;
+    }
+
+    html {
+      height: 100%;
+      scroll-padding-top: env(safe-area-inset-top, 0px);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: linear-gradient(var(--deep), var(--sea) 70%, var(--teal));
+      color: var(--foam);
+      font-family: 'VT323', 'Courier New', monospace;
+      font-size: 22px;
+      line-height: 1.25;
+      overflow-x: hidden;
+      touch-action: manipulation;
+    }
+
+    .px {
+      font-family: 'Press Start 2P', 'Courier New', monospace;
+      line-height: 1.7;
+    }
+
+    #bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    #bg span {
+      position: absolute;
+      bottom: -40px;
+      font-size: 26px;
+      opacity: .35;
+      animation: up linear infinite;
+    }
+
+    @keyframes up {
+      to { transform: translateY(-115vh); }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 18px 16px 28px;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.on {
+      display: block;
+    }
+
+    .box {
+      background: var(--ink);
+      border: 4px solid var(--foam);
+      box-shadow: 6px 6px 0 var(--ink), 6px 6px 0 2px var(--teal);
+      padding: 16px;
+      margin: 14px 0;
+    }
+
+    h1 {
+      font-size: 19px;
+      margin: 0 0 10px;
+      color: var(--sun);
+      text-shadow: 3px 3px 0 var(--coral);
+    }
+
+    h2 {
+      font-size: 13px;
+      margin: 0 0 10px;
+      color: var(--sun);
+    }
+
+    p {
+      margin: 8px 0;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      font-family: 'Press Start 2P', 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--ink);
+      background: var(--sun);
+      border: 4px solid var(--ink);
+      box-shadow: 0 6px 0 var(--coral);
+      padding: 14px 10px;
+      margin: 14px 0;
+      cursor: pointer;
+      min-height: 52px;
+      text-align: center;
+    }
+
+    .btn:active {
+      transform: translateY(5px);
+      box-shadow: 0 1px 0 var(--coral);
+    }
+
+    .btn.alt {
+      background: var(--foam);
+      box-shadow: 0 6px 0 var(--teal);
+    }
+
+    .btn.lock {
+      background: #58798c;
+      box-shadow: 0 6px 0 #2f4a5a;
+      color: #cfe;
+    }
+
+    .btn:focus-visible,
+    input:focus-visible {
+      outline: 4px solid var(--coral);
+      outline-offset: 2px;
+    }
+
+    input {
+      width: 100%;
+      font: inherit;
+      font-size: 26px;
+      padding: 10px;
+      border: 4px solid var(--foam);
+      background: var(--deep);
+      color: var(--sun);
+      margin-top: 6px;
+    }
+
+    .blink {
+      animation: bl 1s steps(2) infinite;
+    }
+
+    @keyframes bl {
+      50% { opacity: 0; }
+    }
+
+    .hero {
+      text-align: center;
+      padding-top: 16px;
+    }
+
+    .hero .big {
+      font-size: 64px;
+      display: block;
+      animation: bob 1.6s steps(4) infinite;
+    }
+
+    @keyframes bob {
+      50% { transform: translateY(-10px); }
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+
+    .badges {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      font-size: 34px;
+    }
+
+    .badges i {
+      font-style: normal;
+      filter: grayscale(1) brightness(.5);
+    }
+
+    .badges i.on {
+      filter: none;
+    }
+
+    #field {
+      position: relative;
+      height: 56vh;
+      min-height: 300px;
+      overflow: hidden;
+      border: 4px solid var(--foam);
+      background: linear-gradient(#0b6f9c, #04223a);
+      touch-action: none;
+      margin-top: 10px;
+    }
+
+    .it {
+      position: absolute;
+      font-size: 36px;
+      line-height: 1;
+      padding: 4px;
+      transition: transform 4s linear;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .bar {
+      height: 34px;
+      border: 4px solid var(--foam);
+      background: var(--deep);
+      margin: 10px 0;
+    }
+
+    #hpf {
+      height: 100%;
+      width: 30%;
+      background: repeating-linear-gradient(90deg, var(--coral) 0 14px, #ff9aa4 14px 18px);
+      transition: width .3s steps(5);
+    }
+
+    #box {
+      font-size: 90px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #box.sh {
+      animation: sh .1s linear 6;
+    }
+
+    @keyframes sh {
+      25% { transform: rotate(-8deg); }
+      75% { transform: rotate(8deg); }
+    }
+
+    .rar {
+      display: inline-block;
+      padding: 4px 8px;
+      font-size: 10px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .fall {
+      position: fixed;
+      top: -40px;
+      z-index: 5;
+      font-size: 28px;
+      pointer-events: none;
+      animation: fl 2.6s linear forwards;
+    }
+
+    @keyframes fl {
+      to { transform: translateY(110vh) rotate(360deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #bg span,
+      .hero .big,
+      .blink {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="bg" aria-hidden="true"></div>
+
+  <div class="wrap">
+
+    <section id="title" class="screen on hero">
+      <span class="big" aria-hidden="true">🪼</span>
+      <h1 class="px">SEMANGATTT<br>REIII</h1>
+
+      <div class="box">
+        <p>Ada game kecil nihh buat kamuuu. Misinya cuma satu: bikin kamu semangat lagii hehe.</p>
+        <p>(temanya laut, kamu suka biru kan? hehe)</p>
+        <label for="nm">Nama Player:</label>
+        <input id="nm" maxlength="16" placeholder="ketik namamu" autocomplete="off">
+      </div>
+
+      <button class="btn" id="go">MULAI GAME</button>
+      <p class="px blink" style="font-size:10px">TAP UNTUK MULAI</p>
+    </section>
+
+    <section id="menu" class="screen">
+      <div class="box">
+        <h2 class="px">PLAYER : <span class="nm"></span></h2>
+        <p>Halo <span class="nm"></span>! Kerjain 3 misinya, nanti bisa liat pesan rahasia hehe.</p>
+        <div class="badges" id="badges">
+          <i>🎮</i>
+          <i>🎁</i>
+          <i>💖</i>
+        </div>
+        <p class="px" style="font-size:10px; text-align:center" id="prog">MISI 0/3</p>
+      </div>
+
+      <button class="btn" data-go="game">🎮 TANGKAP HATI</button>
+      <button class="btn" data-go="loot">🎁 BUKA LOOT BOX</button>
+      <button class="btn" data-go="hp">💖 ISI ULANG HP</button>
+      <button class="btn lock" id="sec">🔒 PESAN RAHASIA</button>
+      <p id="hint" style="text-align:center; color:var(--sun)"></p>
+    </section>
+
+    <section id="game" class="screen">
+      <div class="top px">
+        <span>SKOR <b id="sc">0</b></span>
+        <span>WAKTU <b id="tl">20</b></span>
+      </div>
+
+      <div id="field"></div>
+
+      <p style="text-align:center">Tap 💖 (+1) dan ⭐ (+3). Hindari 👾 bad mood (-2). Target 15!</p>
+
+      <div class="box" id="res" hidden>
+        <h2 class="px" id="rt"></h2>
+        <p id="rp"></p>
+        <button class="btn" id="again">MAIN LAGI</button>
+      </div>
+
+      <button class="btn alt" data-go="menu">← KEMBALI KE MENU</button>
+    </section>
+
+    <section id="loot" class="screen">
+      <div class="box">
+        <h2 class="px">LOOT BOX HARIAN</h2>
+        <p>Isinya semangat. Ada yang biasa, ada yang langka. Tap kotaknya!. Ada banyak loh pesannya wkwk, kamu cek semua yahh hehe. Sampai dapet Legendaris kalo bisa dekk hehe</p>
+      </div>
+
+      <div id="box" role="button" tabindex="0" aria-label="Buka loot box">🎁</div>
+
+      <div class="box" id="lr" hidden>
+        <span class="rar px" id="rr"></span>
+        <p id="lt" style="font-size:26px"></p>
+      </div>
+
+      <button class="btn" id="open">BUKA LAGI</button>
+      <button class="btn alt" data-go="menu">← KEMBALI KE MENU</button>
+    </section>
+
+    <section id="hp" class="screen">
+      <div class="box">
+        <h2 class="px">HP KAMU</h2>
+        <div class="bar">
+          <div id="hpf"></div>
+        </div>
+        <p class="px" id="hpn" style="font-size:11px">30 / 100</p>
+        <p id="hpm" style="font-size:26px">HP kamu tipissss, isi ulangg yahh, tap tombol ini Dekkk!</p>
+      </div>
+
+      <button class="btn" id="heal">💖 PELUK VIRTUAL</button>
+      <button class="btn alt" data-go="menu">← KEMBALI KE MENU</button>
+    </section>
+
+    <section id="final" class="screen">
+      <div class="box">
+        <h2 class="px">💌 PESAN RAHASIA</h2>
+        <p id="fm" style="font-size:26px; min-height:300px"></p>
+      </div>
+
+      <button class="btn" id="boom">🎉 MERAYAKAN</button>
+      <button class="btn alt" data-go="menu">← KEMBALI KE MENU</button>
+    </section>
+
+  </div>
+
+  <script>
+    var ME = "Iki";
+
+    var done = { game: false, loot: false, hp: false };
+    var name = "Cantik";
+    var ac;
+
+    var $ = function (s) {
+      return document.querySelector(s);
+    };
+
+    function show(id) {
+      document.querySelectorAll('.screen').forEach(function (e) {
+        e.classList.remove('on');
+      });
+      $('#' + id).classList.add('on');
+
+      if (id === 'menu') refresh();
+      if (id !== 'game') stopGame();
+
+      window.scrollTo(0, 0);
+    }
+
+    function beep(freq, dur) {
+      try {
+        ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+        var osc = ac.createOscillator();
+        var gain = ac.createGain();
+
+        osc.type = 'square';
+        osc.frequency.value = freq || 660;
+        gain.gain.value = 0.05;
+
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start();
+        osc.stop(ac.currentTime + (dur || 0.08));
+      } catch (e) {}
+    }
+
+    function boom(emojis) {
+      var list = emojis || ['💖', '⭐', '🐠', '✨', '🫧', '🎉'];
+
+      for (var i = 0; i < 26; i++) {
+        var s = document.createElement('span');
+        s.className = 'fall';
+        s.textContent = list[i % list.length];
+        s.style.left = Math.random() * 94 + 'vw';
+        s.style.animationDelay = Math.random() * 0.8 + 's';
+        document.body.appendChild(s);
+
+        setTimeout(function (x) {
+          x.remove();
+        }, 3600, s);
+      }
+    }
+
+    (function () {
+      var bg = $('#bg');
+      var icons = ['🫧', '🐟', '🫧', '💙', '🐠', '🫧'];
+
+      for (var i = 0; i < 12; i++) {
+        var s = document.createElement('span');
+        s.textContent = icons[i % icons.length];
+        s.style.left = (i * 8 + Math.random() * 6) + '%';
+        s.style.animationDuration = (9 + Math.random() * 10) + 's';
+        s.style.animationDelay = (-Math.random() * 12) + 's';
+        bg.appendChild(s);
+      }
+    })();
+
+    document.querySelectorAll('[data-go]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        beep(520);
+        show(btn.dataset.go);
+        if (btn.dataset.go === 'game') startGame();
+      });
+    });
+
+    $('#go').addEventListener('click', function () {
+      name = ($('#nm').value || '').trim() || 'Cantik';
+
+      document.querySelectorAll('.nm').forEach(function (e) {
+        e.textContent = name;
+      });
+
+      beep(780, 0.15);
+      show('menu');
+    });
+
+    function refresh() {
+      var count = 0;
+      var keys = ['game', 'loot', 'hp'];
+
+      document.querySelectorAll('#badges i').forEach(function (el, i) {
+        var finished = done[keys[i]];
+        el.classList.toggle('on', finished);
+        if (finished) count++;
+      });
+
+      $('#prog').textContent = 'MISI ' + count + '/3';
+
+      var secBtn = $('#sec');
+      secBtn.classList.toggle('lock', count < 3);
+      secBtn.textContent = count < 3 ? '🔒 PESAN RAHASIA' : '🔓 BUKA PESAN RAHASIA';
+
+      $('#hint').textContent = count < 3 ? '' : 'Pesan rahasia sudah kebuka! Itu doang sihh, hehe, maaf kalo ga bagus yahh';
+    }
+
+    $('#sec').addEventListener('click', function () {
+      var count = Object.keys(done).filter(function (k) {
+        return done[k];
+      }).length;
+
+      if (count < 3) {
+        $('#hint').textContent = 'Masih terkunci. Selesaikan 3 misi dulu ya!';
+        beep(150, 0.2);
+        return;
+      }
+
+      beep(880, 0.2);
+      boom();
+      show('final');
+      type();
+    });
+
+    var sc = 0;
+    var tl = 0;
+    var tm;
+    var sp;
+    var run = false;
+
+    function stopGame() {
+      run = false;
+      clearInterval(tm);
+      clearInterval(sp);
+    }
+
+    function startGame() {
+      stopGame();
+      sc = 0;
+      tl = 20;
+      run = true;
+
+      $('#sc').textContent = 0;
+      $('#tl').textContent = 20;
+      $('#res').hidden = true;
+      $('#field').innerHTML = '';
+
+      tm = setInterval(function () {
+        tl--;
+        $('#tl').textContent = tl;
+        if (tl <= 0) endGame();
+      }, 1000);
+
+      sp = setInterval(spawn, 620);
+    }
+
+    function spawn() {
+      var field = $('#field');
+      var el = document.createElement('div');
+      var r = Math.random();
+
+      var item;
+      if (r < 0.15) item = ['⭐', 3];
+      else if (r < 0.78) item = ['💖', 1];
+      else item = ['👾', -2];
+
+      el.className = 'it';
+      el.textContent = item[0];
+      el.style.left = Math.random() * Math.max(10, field.clientWidth - 52) + 'px';
+      el.style.top = '-48px';
+      field.appendChild(el);
+
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          el.style.transform = 'translateY(' + (field.clientHeight + 70) + 'px)';
+        });
+      });
+
+      el.addEventListener('pointerdown', function (ev) {
+        ev.preventDefault();
+        if (!run || el.dead) return;
+
+        el.dead = 1;
+        sc = Math.max(0, sc + item[1]);
+        $('#sc').textContent = sc;
+        el.textContent = item[1] > 0 ? '✨' : '💥';
+        beep(item[1] > 0 ? 880 : 170);
+
+        setTimeout(function () {
+          el.remove();
+        }, 250);
+      });
+
+      setTimeout(function () {
+        el.remove();
+      }, 4300);
+    }
+
+    function endGame() {
+      stopGame();
+      done.game = true;
+
+      var win = sc >= 15;
+
+      $('#rt').textContent = win ? 'LEVEL UP! 🏆' : 'LUMAYAN!';
+      $('#rp').textContent = win
+        ? 'Skor ' + sc + '. Jago banget, ' + name + '! Jadiii sukaa dehhh wkwkwkwk.'
+        : 'Skor ' + sc + '. Tinggal sedikit lagi. Coba sekali lagi, pasti tembus 15!';
+      $('#res').hidden = false;
+
+      if (win) {
+        boom();
+        beep(990, 0.3);
+      }
+    }
+
+    $('#again').addEventListener('click', function () {
+      beep(520);
+      startGame();
+    });
+
+    var LOOT = {
+      C: {
+        n: 'BIASA',
+        c: '#b9f3f0',
+        m: [
+          'Kamu jadi panitia jangan  berat", kasian kamunyaaa.',
+          'Kamu udahh hebatt bangett kokkk hari inii sama kemarinn.',
+          'SEMANGATTT YAHHHH ADEKKKK.'
+        ]
+      },
+      R: {
+        n: 'LANGKA',
+        c: '#7ad8ff',
+        m: [
+          'Gasabarr mau mabar roblox sama kamu lagiii wkwkwk.',
+          'Gasabarr mau denger kamuu ngomonggg wkwkwk.',
+          'Kamu jangan cape capee yahhh.',
+          'KALOO KAMU BOSAN, ADA AKUU KOKKK WKWKWK.'
+        ]
+      },
+      E: {
+        n: 'EPIK',
+        c: '#ffd36b',
+        m: [
+          'SEMANGATTT CANTIIIKKKK, hari ini kan udah beres hehe',
+          'Kalo kamu capek hari ini, aku nungguin kokk kalo kamu uda pulangg.',
+          'KAMU JANGAN CAPE CAPEE YAHHH, HMMPH.'
+        ]
+      },
+      G: {
+        n: 'LEGENDARIS',
+        c: '#ff6f7d',
+        m: [
+          'ITEM LANGKA: Kupon peluk gratis, berlaku selamanya. Tidak bisa dibatalkan.',
+          'ITEM LANGKA: Satu traktiran makanan favorit, tagih kalo aku kapan kapan main ke ke Koto, eh Minangg hehehe!'
+        ]
+      }
+    };
+
+    function openBox() {
+      var box = $('#box');
+      box.classList.add('sh');
+      beep(300, 0.3);
+      $('#lr').hidden = true;
+
+      setTimeout(function () {
+        box.classList.remove('sh');
+
+        var r = Math.random();
+        var key;
+        if (r < 0.5) key = 'C';
+        else if (r < 0.8) key = 'R';
+        else if (r < 0.95) key = 'E';
+        else key = 'G';
+
+        var tier = LOOT[key];
+        var msg = tier.m[Math.floor(Math.random() * tier.m.length)];
+
+        $('#rr').textContent = tier.n;
+        $('#rr').style.background = tier.c;
+        $('#lt').textContent = msg;
+        $('#lr').hidden = false;
+
+        done.loot = true;
+        beep(key === 'G' ? 1100 : 800, 0.2);
+
+        if (key === 'G' || key === 'E') boom();
+      }, 650);
+    }
+
+    $('#box').addEventListener('click', openBox);
+    $('#open').addEventListener('click', openBox);
+    $('#box').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openBox();
+      }
+    });
+
+    var hp = 30;
+    var healMsgs = [
+      'Pelukan pertama masuk! +15 HP',
+      'Dikasih semangat dulu... +15 HP',
+      'DISEMANGATINNN BANGETT. +15 HP',
+      'Efek status: dicintai. +15 HP'
+    ];
+
+    $('#heal').addEventListener('click', function () {
+      beep(600 + hp * 4, 0.1);
+
+      if (hp >= 100) {
+        boom(['💖']);
+        $('#hpm').textContent = 'HP penuh! Pasti kamu udah semangat lagi wkwkwk';
+        return;
+      }
+
+      hp = Math.min(100, hp + 15);
+      $('#hpf').style.width = hp + '%';
+      $('#hpn').textContent = hp + ' / 100';
+
+      if (hp >= 100) {
+        done.hp = true;
+        $('#hpm').textContent = 'HP PENUH! Kamu siap lanjut ke level berikutnya 💖';
+        boom(['💖', '✨']);
+      } else {
+        $('#hpm').textContent = healMsgs[Math.floor(Math.random() * healMsgs.length)];
+      }
+    });
+
+    var typer;
+
+    function type() {
+      clearInterval(typer);
+
+      var text =
+        'Hai ' + name + '.\n\n' +
+        'Kalau hari ini capek banget, inget ada Iki hehehehe. ' +
+        'Inget IKI aja kalo misal kamu selalu ngerasa ga semangat, atau bosan.\n\n' +
+        'Maaf kalo akunya selalu jarang ada buat kamu, tapi aku bakal usahain selalu hadir kokk kalo kalo kamu udah bosen atau ga semangat.\n\n' +
+        'Peluk jauh dulu ya, hehehe 🤗\n\n' +
+        '- ' + ME;
+
+      var i = 0;
+      var el = $('#fm');
+      el.style.whiteSpace = 'pre-wrap';
+      el.textContent = '';
+
+      typer = setInterval(function () {
+        i++;
+        el.textContent = text.slice(0, i);
+        if (i >= text.length) clearInterval(typer);
+      }, 35);
+    }
+
+    $('#boom').addEventListener('click', function () {
+      beep(900, 0.2);
+      boom();
+    });
+  </script>
+</body>
+</html>
